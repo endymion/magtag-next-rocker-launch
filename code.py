@@ -14,7 +14,8 @@ months = ["January", "February", "March", "April", "May", "June", "July",
           "August", "September", "October", "November", "December"]
 USE_24HR_TIME = False
 # in seconds, we can refresh about 100 times on a battery
-TIME_BETWEEN_REFRESHES = 24 * 60 * 60  # once a day delay
+#TIME_BETWEEN_REFRESHES = 24 * 60 * 60  # once a day delay
+TIME_BETWEEN_REFRESHES = 10 * 60  # once a day delay
 
 # https://ll.thespacedevs.com/2.2.0/launch/upcoming/?location__ids=12,27
 
@@ -51,9 +52,9 @@ def time_transform(val2):
     if USE_24HR_TIME:
         timestring = "%d:%02d" % (hour, min)
     elif hour > 12:
-        timestring = "%d:%02d pm" % (hour-12, min)
+        timestring = "%d:%02d PM" % (hour-12, min)
     else:
-        timestring = "%d:%02d am" % (hour, min)
+        timestring = "%d:%02d AM" % (hour, min)
 
     return "%s %d, at %s" % (months[month-1], day, timestring)
 
@@ -64,13 +65,16 @@ def details_transform(val3):
 
 # Set up the MagTag with the JSON data parameters
 magtag = MagTag(
-    url=DATA_SOURCE,
-    json_path=(NAME_LOCATION, DATE_LOCATION, DETAIL_LOCATION)
+    url=DATA_SOURCE
+#    json_path=(NAME_LOCATION, DATE_LOCATION, DETAIL_LOCATION)
 )
+
+magtag.graphics.set_background("background.bmp")
 
 magtag.add_text(
     text_font="/fonts/8BitWonder-16.bdf",
-    text_position=(10, 15),
+    text_position=(14, 3),
+    text_color=0xFFFFFF,
     is_data=False
 )
 # Display heading text below with formatting above
@@ -78,7 +82,7 @@ magtag.set_text("Next rocket launch")
 
 # Formatting for the mission text
 magtag.add_text(
-    text_font="/fonts/Arial-Bold-12.pcf",
+    text_font="/fonts/Pixellari-16.bdf",
     text_position=(10, 38),
     text_transform=mission_transform
 )
@@ -87,7 +91,7 @@ print("running time transform...")
 
 # Formatting for the launch time text
 magtag.add_text(
-    text_font="/fonts/Arial-12.bdf",
+    text_font="/fonts/Pixellari-16.bdf",
     text_position=(10, 60),
     text_transform=time_transform
 )
